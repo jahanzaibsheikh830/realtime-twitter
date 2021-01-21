@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./fav.ico" type="image/gif" sizes="16x16">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./socket.io.js"></script>
+</head>
+<body>
+    <div class="main">
+        <form action="#" onsubmit="return login()">
+            <p style="font-size: 18px; text-align: center;">Create account<a href="./index.html">Sign up</a></p>
+            <h1 style="text-align: center; margin-bottom: 20px;">login</h1>
+            <label>Email<span class="req">*</span></label>
+            <input type="email" id="lemail" placeholder="Enter Your Email" required>
+            <label>Password<span class="req">*</span></label>
+            <input type="password" id="lpassword" placeholder="Enter Your Password" required>
+            <button>login</button>
+        </form><br>
+        <p style="font-size: 18px; text-align: center;"><a href="./forget.html" style="color: black">Forget Password</a></p>
+        <h3 id="result"></h3>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

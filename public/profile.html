@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./fav.ico" type="image/gif" sizes="16x16">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./socket.io.js"></script>
+    <title>Profile</title>
+
+</head>
+
+<body onload="getProfile(); getTweets();">
+
+    <header  style="background-color: #3c8dbc;" class="sticky-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pt-2 pb-5">
+                        <a class="btn btn-outline-light float-right mr-3" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <div class="wrapper">
+            <div class="sidebar">
+                <div>
+                    <form>
+                        <label for="fileToUpload">
+                            <div class="profile-pic" id="profilePic">
+                                <span class="glyphicon glyphicon-camera"></span>
+                                <span>Change Image</span>
+                            </div>
+                        </label>
+                        <input type="File" name="fileToUpload" id="fileToUpload" onchange="upload(); previewFile()">
+                    </form>
+                    <div style="margin-top: -40px;">
+                        <h2 id="pName">Jahanzaib</h2>
+                    </div>
+                    <div>
+                        <ul class="ul">
+                            <li onclick="showHome()">Home</li>
+                            <li onclick="showProfile()">Profile</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+
+                <section class="pt-3">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <form onsubmit="return post()" action="#">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="tweet" aria-describedby="emailHelp"
+                                            placeholder="Type your post" required>
+                                    </div>
+                                    <button class="btn " style="width: 100%">Post</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="mt-5" id="home">
+                    <div class="container">
+                        <h1 class="text-center">Home</h1>
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 shadow p-3 mb-5 rounded" id="posts">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="mt-5" id="profile">
+                    <div class="container">
+                        <h1 class="text-center">Profile</h1>
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 shadow p-3 mb-5 rounded" id="userPosts">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>
