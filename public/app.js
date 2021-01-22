@@ -308,9 +308,11 @@ function upload() {
         .then(res => {
             var userData = res
             // userData = JSON.parse(userData)
+            console.log("response data=> " ,res.data);
             // var jsonParse = JSON.parse(userData)
             console.log(`upload Success` + userData.toString());
-            // localStorage.setItem('aja', JSON.stringify(res))            
+            // localStorage.setItem('aja', JSON.stringify(res))   
+            document.getElementById("profilePic").style.backgroundImage = `url(${res.data.url})`         
         })
         .catch(err => {
             console.log(err);

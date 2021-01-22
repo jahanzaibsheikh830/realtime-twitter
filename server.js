@@ -37,9 +37,9 @@ var SERVICE_ACCOUNT = JSON.parse(process.env.SERVICE_ACCOUNT)
 
 admin.initializeApp({
     credential: admin.credential.cert(SERVICE_ACCOUNT),
-    databaseURL: "c1085f89-3538-4e2d-8751-faf7125765e6"
+    databaseURL: "https://twitter-profile-pics-default-rtdb.firebaseio.com"
 });
-const bucket = admin.storage().bucket("gs://-profile-pics.appspot.com");
+const bucket = admin.storage().bucket("gs://twitter-profile-pics.appspot.com");
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -202,7 +202,7 @@ app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.sin
                                     if (!err) {
                                         res.status(200).send({
                                             message: "succesfully uploaded",
-                                            url: updatedProfile,
+                                            url: urlData[0],
                                         })
                                     }
                                     else {
