@@ -33,11 +33,11 @@ var upload = multer({ storage: storage })
 
 const admin = require("firebase-admin");
 // https://firebase.google.com/docs/storage/admin/start
-var SERVICE_ACCOUNT =JSON.parse(process.env.SERVICE_ACCOUNT) 
+var SERVICE_ACCOUNT = JSON.parse(process.env.SERVICE_ACCOUNT)
 
 admin.initializeApp({
     credential: admin.credential.cert(SERVICE_ACCOUNT),
-    databaseURL: databaseURL
+    databaseURL: "c1085f89-3538-4e2d-8751-faf7125765e6"
 });
 const bucket = admin.storage().bucket("gs://-profile-pics.appspot.com");
 
