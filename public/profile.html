@@ -45,7 +45,6 @@
                     <form>
                         <label for="fileToUpload">
                             <div class="profile-pic" id="profilePic" style="background-image: url('./fallback.png');">
-                                
                                 <span class="glyphicon glyphicon-camera"></span>
                                 <span>Change Image</span>
                             </div>
@@ -74,6 +73,10 @@
                                         <input type="text" class="form-control" id="tweet" aria-describedby="emailHelp"
                                             placeholder="Type your post" required>
                                     </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile" accept="image/png, image/jpeg, img/jpg">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                      </div>
                                     <button class="btn " style="width: 100%">Post</button>
                                 </form>
                             </div>

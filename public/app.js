@@ -1,5 +1,5 @@
-// var url = "http://localhost:5000"
-var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
+var url = "http://localhost:5000"
+// var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
 //user signup request using axios
 
 var socket = io(url);
@@ -72,53 +72,64 @@ function getProfile() {
     });
     return false
 }
-
-//user tweet or post request using axios
 function post() {
+    var fileInput = document.getElementById("customFile");
+    var tweet = document.getElementById('tweet')
+    let formData = new FormData();
+    formData.append("myFile", fileInput.files[0]);
+    formData.append("tweet", tweet.value);
+    
     axios({
         method: 'post',
-        url: url + '/tweet',
-        credentials: 'include',
-        data: {
-            tweet: document.getElementById('tweet').value,
-        },
-    }).then((response) => {
-        console.log(response);
-        if (response.data.data.profilePic) {
-            document.getElementById('userPosts').innerHTML += `
-            <div class="posts row">
+        url: url + "/tweet",
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+    })
+        .then(response => {
+            // var userData = res
+            // userData = JSON.parse(userData)
+                
+                console.log("response data=> " ,response.data.data.name); 
+                if (response.data.data.profilePic) {
+                    document.getElementById('userPosts').innerHTML += `
+                    <div class="posts row">
             <div class="col-md-2">
-                <img src="${response.data.data.profilePic}" alt="" style="width:50px; border-radius: 100%">
+                <img src="${response.data.data.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
             </div>
             <div class="col-md-10">
                 <span>${response.data.data.name}</span>
-                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
+                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</span>
                 <p>${response.data.data.tweets}</p>
-            </div>
-            </div>
-        `            
-        }
-        else{
-            document.getElementById('userPosts').innerHTML += `
-            <div class="posts row">
-            <div class="col-md-2">
-                <img src="${'./fallback.png'}" alt="" style="width:50px; border-radius: 100%">
             </div>
             <div class="col-md-10">
-                <span>${response.data.data.name}</span>
-                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
-                <p>${response.data.data.tweets}</p>
-            </div>
-            </div>
-        `   
-        }
+            <img src="${response.data.data.tweetImg}" width="400">
+        </div>
+            </div>`            
+                }
+                else{
+                    document.getElementById('userPosts').innerHTML += `
+                    <div class="posts row">
+                    <div class="col-md-2">
+                        <img src="${'./fallback.png'}" alt="" style="width:50px; border-radius: 100%">
+                    </div>
+                    <div class="col-md-10">
+                        <span>${response.data.data.name}</span>
+                        <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
+                        <p>${response.data.data.tweets}</p>
+                    </div>
+                    <div class="col-md-10">
+                    <img src="${tweets.tweetImg}" width="400">
+                </div>
+                    </div>
+                `   
+                }
+        
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    return false;
 
-
-    }, (error) => {
-        console.log(error.message);
-    });
-    document.getElementById('tweet').value = "";
-    return false
 }
 
 //get all user post or tweet request using axios
@@ -128,35 +139,41 @@ function getTweets() {
         url: url + '/getTweets',
         credentials: 'include',
     }).then((response) => {
-        console.log(response.data.data.profilePic)
+        console.log(response.data.data)
         let tweets = response.data.data;
         let html = ""
         tweets.forEach(element => {
             if (element.profilePic) {
-                html += `                <div class="posts row">
-                <div class="col-md-2">
-                    <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-                </div>
-                <div class="col-md-10">
-                    <span>${element.name}</span>
-                    <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
-                    <p>${element.tweets}</p>
-                </div>
-                </div>
-                `                
+                html += `
+                <div class="posts row">
+        <div class="col-md-2">
+            <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
+        </div>
+        <div class="col-md-10">
+            <span>${element.name}</span>
+            <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
+            <p>${element.tweets}</p>
+        </div>
+        <div class="col-md-10">
+        <img src="${element.tweetImg}" width="400">
+    </div>
+        </div>`                
             }
             else{
-                html += `                <div class="posts row">
-                <div class="col-md-2">
-                    <img src="${'./fallback.png'}" alt="" style="width: 50px; border-radius: 100%; ">
-                </div>
-                <div class="col-md-10">
-                    <span>${element.name}</span>
-                    <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
-                    <p>${element.tweets}</p>
-                </div>
-                </div>
-                `
+                html += `
+                <div class="posts row">
+        <div class="col-md-2">
+            <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
+        </div>
+        <div class="col-md-10">
+            <span>${element.name}</span>
+            <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
+            <p>${element.tweets}</p>
+        </div>
+        <div class="col-md-10">
+        <img src="${element.tweetImg}" width="400">
+    </div>
+        </div>`
             }
 
         });
@@ -177,7 +194,10 @@ function getTweets() {
             <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
             <p>${element.tweets}</p>
         </div>
-        </div>`
+        <div class="col-md-10">
+        <img src="${element.tweetImg}" width="400">
+    </div>
+        </div>` 
             }
         });
         document.getElementById('userPosts').innerHTML = userHtml;
@@ -199,6 +219,9 @@ socket.on('NEW_POST', (newPost) => {
             <span class="text-primary">${new Date(tweets.createdOn).toLocaleTimeString()}</span>
             <p>${tweets.tweets}</p>
         </div>
+        <div class="col-md-10">
+        <img src="${tweets.tweetImg}" width="400">
+    </div>
         </div>
     `
 

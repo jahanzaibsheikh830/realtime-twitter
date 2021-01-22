@@ -51,6 +51,7 @@ var usersTweets = new mongoose.Schema({
     "name": String,
     "tweets": String,
     "profilePic": String,
+    "tweetImg": String,
     "createdOn": { "type": Date, "default": Date.now },
 });
 var tweetModel = mongoose.model("tweet", usersTweets);
