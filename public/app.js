@@ -1,5 +1,5 @@
 // var url = "http://localhost:5000"
-var url = "https://realtime-twitt1er-jahanzaib.herokuapp.com"
+var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
 //user signup request using axios
 
 var socket = io(url);
