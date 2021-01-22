@@ -1,5 +1,5 @@
-var url = "http://localhost:5000"
-// var url = "https://twitter-jahan.herokuapp.com"
+// var url = "http://localhost:5000"
+var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
 //user signup request using axios
 
 var socket = io(url);
@@ -64,17 +64,9 @@ function getProfile() {
         credentials: 'include',
     }).then((response) => {
         let src = response.data.profile.profilePic
-        console.log(src)
-        if (src) {
             document.getElementById('pName').innerHTML = response.data.profile.name
             document.getElementById('profilePic').style.backgroundImage = `url(${src})`;
             sessionStorage.setItem('email', response.data.profile.email)
-        }
-        else{
-            document.getElementById('pName').innerHTML = response.data.profile.name
-            document.getElementById('profilePic').style.backgroundImage = `url('./fallback.png')`;
-        }
-        // console.log(JSON.parse(localStorage.getItem('aja')))
     }, (error) => {
         location.href = "./login.html"
     });
@@ -99,8 +91,8 @@ function post() {
                 <img src="${response.data.data.profilePic}" alt="" style="width:50px; border-radius: 100%">
             </div>
             <div class="col-md-10">
-                <h4>${response.data.data.name}</h4>
-                <p class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
+                <span>${response.data.data.name}</span>
+                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
                 <p>${response.data.data.tweets}</p>
             </div>
             </div>
@@ -113,8 +105,8 @@ function post() {
                 <img src="${'./fallback.png'}" alt="" style="width:50px; border-radius: 100%">
             </div>
             <div class="col-md-10">
-                <h4>${response.data.data.name}</h4>
-                <p class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
+                <span>${response.data.data.name}</span>
+                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
                 <p>${response.data.data.tweets}</p>
             </div>
             </div>
@@ -278,11 +270,9 @@ function logout() {
 
 //display homepage using display none or block property
 document.getElementById('profile').style.display = "none"
-document.getElementById('usersSection').style.display = "none"
 function showHome() {
     document.getElementById('profile').style.display = "none"
     document.getElementById('home').style.display = "block"
-    document.getElementById('usersSection').style.display = "none"
 
 }
 
@@ -290,14 +280,11 @@ function showHome() {
 function showProfile() {
     document.getElementById('home').style.display = "none"
     document.getElementById('profile').style.display = "block"
-    document.getElementById('usersSection').style.display = "none"
-
 }
 
 function showUsers() {
     document.getElementById('home').style.display = "none"
     document.getElementById('profile').style.display = "none"
-    document.getElementById('usersSection').style.display = "block"
 
 }
 function upload() {
@@ -306,17 +293,12 @@ function upload() {
 
     console.log("fileInput: ", fileInput);
     console.log("fileInput: ", fileInput.files[0]);
-
+    // document.getElementById('profilePic').style.backgroundImage = `url(${fileInput.files[0]})`;
+    
     let formData = new FormData();
     formData.append("myFile", fileInput.files[0]);
     formData.append("email", sessionStorage.getItem('email'));
-    formData.append("myDetails",
-        JSON.stringify({
-            "subject": "Science",
-            "year": "2021"
-        })
-    );
-
+    
     axios({
         method: 'post',
         url: url + "/upload",
@@ -328,12 +310,11 @@ function upload() {
             // userData = JSON.parse(userData)
             // var jsonParse = JSON.parse(userData)
             console.log(`upload Success` + userData.toString());
-            // localStorage.setItem('aja', JSON.stringify(res))
+            // localStorage.setItem('aja', JSON.stringify(res))            
         })
         .catch(err => {
             console.log(err);
         })
-
     return false;
 
 }
