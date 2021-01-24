@@ -49,6 +49,7 @@ var otpModel = mongoose.model("otp", resetPassword);
 
 var usersTweets = new mongoose.Schema({
     "name": String,
+    "email": String,
     "tweets": String,
     "profilePic": String,
     "tweetImg": String,

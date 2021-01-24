@@ -1,5 +1,5 @@
-// var url = "http://localhost:5000"
-var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
+var url = "http://localhost:5000"
+// var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
 //user signup request using axios
 
 var socket = io(url);
@@ -7,6 +7,50 @@ socket.on('connect', function () {
     console.log("connected")
 });
 
+function tweetsBox(name, email, profilepic, tweetimg, date, tweet) {
+    let box = `
+     <section class="" >
+     <div class="container">
+         <div class="row justify-content-center">
+             <div class="col-md-6   ">
+                 <div class="posts">
+             <div class="row">
+                 <div class="col-md-2 m-0 ">
+                     <img style="border-radius: 100%;" width="50" height="50"
+                         src="${profilepic}"
+                         alt="">
+                 </div>
+                 <div class="col-md-10 ">
+                     <span style="margin:  0; font-weight: bold" >${name}</span>
+                     <span class="float-right">${date}</span>
+                     <p style="margin:  0;">${email}</p>
+                 </div>
+             </div>
+             <div class="row">
+                 <div class="col-md-12">
+                     <p class="mt-1">${tweet}</p>
+                 </div>
+             </div>
+             <div class="row">
+                 <div class="col-md-12">
+                     <img width="100%" src="${tweetimg}" alt="">
+                 </div>
+             </div> 
+             <div class="row">
+                 <div class="col-md-12">
+                     
+                 </div>
+             </div>    
+         </div>
+     </div>
+ </div>
+     </div>
+
+     </div>
+ </section>
+    `
+    return box
+}
 function signup() {
     axios({
         method: 'post',
@@ -64,9 +108,14 @@ function getProfile() {
         credentials: 'include',
     }).then((response) => {
         let src = response.data.profile.profilePic
-            document.getElementById('pName').innerHTML = response.data.profile.name
+        document.getElementById('pName').innerHTML = response.data.profile.name
+        if (src) {
             document.getElementById('profilePic').style.backgroundImage = `url(${src})`;
-            sessionStorage.setItem('email', response.data.profile.email)
+        }
+        else {
+            document.getElementById('profilePic').style.backgroundImage = `url('./fallback.png')`;
+        }
+        sessionStorage.setItem('email', response.data.profile.email)
     }, (error) => {
         location.href = "./login.html"
     });
@@ -75,59 +124,41 @@ function getProfile() {
 function post() {
     var fileInput = document.getElementById("customFile");
     var tweet = document.getElementById('tweet')
-    let formData = new FormData();
-    formData.append("myFile", fileInput.files[0]);
-    formData.append("tweet", tweet.value);
-    
-    axios({
-        method: 'post',
-        url: url + "/tweet",
-        data: formData,
-        headers: { 'Content-Type': 'multipart/form-data' }
-    })
-        .then(response => {
-            // var userData = res
-            // userData = JSON.parse(userData)
-                
-                console.log("response data=> " ,response.data.data.name); 
-                if (response.data.data.profilePic) {
-                    document.getElementById('userPosts').innerHTML += `
-                    <div class="posts row">
-            <div class="col-md-2">
-                <img src="${response.data.data.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-            </div>
-            <div class="col-md-10">
-                <span>${response.data.data.name}</span>
-                <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</span>
-                <p>${response.data.data.tweets}</p>
-            </div>
-            <div class="col-md-10">
-            <img src="${response.data.data.tweetImg}" width="400">
-        </div>
-            </div>`            
-                }
-                else{
-                    document.getElementById('userPosts').innerHTML += `
-                    <div class="posts row">
-                    <div class="col-md-2">
-                        <img src="${'./fallback.png'}" alt="" style="width:50px; border-radius: 100%">
-                    </div>
-                    <div class="col-md-10">
-                        <span>${response.data.data.name}</span>
-                        <span class="text-primary">${new Date(response.data.data.createdOn).toLocaleTimeString()}</p>
-                        <p>${response.data.data.tweets}</p>
-                    </div>
-                    <div class="col-md-10">
-                    <img src="${tweets.tweetImg}" width="400">
-                </div>
-                    </div>
-                `   
-                }
-        
+    console.log(fileInput.files[0])
+    if (fileInput.files[0] === undefined) {
+        axios({
+            method: 'post',
+            url: url + '/textTweet',
+            data: {
+                tweet: document.getElementById('tweet').value
+            },
+            withCredentials: true
+        }).then((response) => {
+            console.log(response.data)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    else {
+        let formData = new FormData();
+        formData.append("myFile", fileInput.files[0]);
+        formData.append("tweet", tweet.value);
+
+        axios({
+            method: 'post',
+            url: url + "/tweet",
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' }
         })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(response => {
+                console.log("response data=> ", response);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+
     return false;
 
 }
@@ -144,86 +175,59 @@ function getTweets() {
         let html = ""
         tweets.forEach(element => {
             if (element.profilePic) {
-                html += `
-                <div class="posts row">
-        <div class="col-md-2">
-            <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-        </div>
-        <div class="col-md-10">
-            <span>${element.name}</span>
-            <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
-            <p>${element.tweets}</p>
-        </div>
-        <div class="col-md-10">
-        <img src="${element.tweetImg}" width="400">
-    </div>
-        </div>`                
+                html += tweetsBox(element.name, element.email,
+                    element.profilePic, element.tweetImg,
+                    new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
-            else{
-                html += `
-                <div class="posts row">
-        <div class="col-md-2">
-            <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-        </div>
-        <div class="col-md-10">
-            <span>${element.name}</span>
-            <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
-            <p>${element.tweets}</p>
-        </div>
-        <div class="col-md-10">
-        <img src="${element.tweetImg}" width="400">
-    </div>
-        </div>`
+            else {
+                html += tweetsBox(element.name, element.email,
+                    './fallback.png', element.tweetImg,
+                    new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
-
         });
         document.getElementById('posts').innerHTML = html;
-
+    }, (error) => {
+        console.log(error.message);
+    });
+    return false
+}
+function myTweets() {
+    axios({
+        method: 'get',
+        url: url + '/myTweets',
+        credentials: 'include',
+    }).then((response) => {
+        console.log(response.data.data)
         let userTweet = response.data.data
         let userHtml = ""
-        let userName = document.getElementById('pName').innerHTML;
         userTweet.forEach(element => {
-            if (element.name == userName) {
-                userHtml += `
-                <div class="posts row">
-        <div class="col-md-2">
-            <img src="${element.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-        </div>
-        <div class="col-md-10">
-            <span>${element.name}</span>
-            <span class="text-primary">${new Date(element.createdOn).toLocaleTimeString()}</span>
-            <p>${element.tweets}</p>
-        </div>
-        <div class="col-md-10">
-        <img src="${element.tweetImg}" width="400">
-    </div>
-        </div>` 
+            if (element.profilePic) {
+                userHtml += tweetsBox(element.name, element.email,
+                    element.profilePic, element.tweetImg,
+                    new Date(element.createdOn).toLocaleTimeString(), element.tweets)
+            }
+            else {
+                userHtml += tweetsBox(element.name, element.email,
+                    './fallback.png', element.tweetImg,
+                    new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
         });
         document.getElementById('userPosts').innerHTML = userHtml;
     }, (error) => {
         console.log(error.message);
     });
-    return false
+
 }
 socket.on('NEW_POST', (newPost) => {
     console.log(newPost)
     let tweets = newPost;
-    document.getElementById('posts').innerHTML += `
-    <div class="posts row">
-        <div class="col-md-2">
-            <img src="${tweets.profilePic}" alt="" style="width: 50px; border-radius: 100%; ">
-        </div>
-        <div class="col-md-10">
-            <span>${tweets.name}</span>
-            <span class="text-primary">${new Date(tweets.createdOn).toLocaleTimeString()}</span>
-            <p>${tweets.tweets}</p>
-        </div>
-        <div class="col-md-10">
-        <img src="${tweets.tweetImg}" width="400">
-    </div>
-        </div>
-    `
+    document.getElementById('posts').innerHTML += tweetsBox(tweets.name, tweets.email,
+        tweets.profilePic, tweets.tweetImg,
+        new Date(tweets.createdOn).toLocaleTimeString(), tweets.tweets)
+
+    document.getElementById('userPosts').innerHTML += tweetsBox(tweets.name, tweets.email,
+        tweets.profilePic, tweets.tweetImg,
+        new Date(tweets.createdOn).toLocaleTimeString(), tweets.tweets)
 
 })
 
@@ -317,11 +321,11 @@ function upload() {
     console.log("fileInput: ", fileInput);
     console.log("fileInput: ", fileInput.files[0]);
     // document.getElementById('profilePic').style.backgroundImage = `url(${fileInput.files[0]})`;
-    
+
     let formData = new FormData();
     formData.append("myFile", fileInput.files[0]);
     formData.append("email", sessionStorage.getItem('email'));
-    
+
     axios({
         method: 'post',
         url: url + "/upload",
@@ -331,11 +335,11 @@ function upload() {
         .then(res => {
             var userData = res
             // userData = JSON.parse(userData)
-            console.log("response data=> " ,res.data);
+            console.log("response data=> ", res.data);
             // var jsonParse = JSON.parse(userData)
             console.log(`upload Success` + userData.toString());
             // localStorage.setItem('aja', JSON.stringify(res))   
-            document.getElementById("profilePic").style.backgroundImage = `url(${res.data.url})`         
+            document.getElementById("profilePic").style.backgroundImage = `url(${res.data.url})`
         })
         .catch(err => {
             console.log(err);

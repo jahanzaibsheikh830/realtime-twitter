@@ -62,10 +62,10 @@ button:hover {
     transition: .1s;
 }
 .posts{
-
     padding: 20px;
-    margin: 10px;
-    background-color: #ffffff;
+    margin-bottom: 10px;
+    color: #fff;
+    background-color: #1a2226;
     border-radius: 10px;
 }
 #posts {
@@ -73,10 +73,6 @@ button:hover {
     flex-direction: column-reverse;
   }
 #userPosts {
-    display: flex;
-    flex-direction: column-reverse;
-}
-#usersSection {
     display: flex;
     flex-direction: column-reverse;
 }

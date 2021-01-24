@@ -23,14 +23,14 @@
 
 </head>
 
-<body onload="getProfile(); getTweets();">
+<body onload="getProfile(); getTweets(); myTweets()">
 
-    <header  style="background-color: #3c8dbc;" class="sticky-top">
+    <header style="background-color: #3c8dbc;" class="sticky-top">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="pt-2 pb-5">
-                        
+
                         <a class="btn btn-outline-light float-right mr-3" onclick="logout()">Logout</a>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div>
                     <form>
                         <label for="fileToUpload">
-                            <div class="profile-pic" id="profilePic" style="background-image: url('./fallback.png');">
+                            <div class="profile-pic" id="profilePic" >
                                 <span class="glyphicon glyphicon-camera"></span>
                                 <span>Change Image</span>
                             </div>
@@ -74,9 +74,10 @@
                                             placeholder="Type your post" required>
                                     </div>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile" accept="image/png, image/jpeg, img/jpg">
+                                        <input type="file" class="custom-file-input" id="customFile"
+                                            accept="image/png, image/jpeg, img/jpg">
                                         <label class="custom-file-label" for="customFile">Choose file</label>
-                                      </div>
+                                    </div>
                                     <button class="btn " style="width: 100%">Post</button>
                                 </form>
                             </div>
@@ -84,21 +85,14 @@
                     </div>
                 </section>
                 <section class="mt-5" id="home">
-                    <div class="container">
-                        <h1 class="text-center">Home</h1>
-                        <div class="row justify-content-center">
-                            <div class="col-md-6 shadow p-3 mb-5 rounded" id="posts">
-                            </div>
-                        </div>
+                    <h2 class="text-center">Home</h2>
+                    <div id="posts">
+
                     </div>
                 </section>
                 <section class="mt-5" id="profile">
-                    <div class="container">
-                        <h1 class="text-center">Profile</h1>
-                        <div class="row justify-content-center">
-                            <div class="col-md-6 shadow p-3 mb-5 rounded" id="userPosts">
-                            </div>
-                        </div>
+                    <h2 class="text-center">Profile</h2>
+                    <div id="userPosts">
                     </div>
                 </section>
             </div>
