@@ -227,7 +227,7 @@ function myTweets() {
 socket.on('NEW_POST', (newPost) => {
     console.log(newPost)
     let tweets = newPost;
-    var name = element.name.charAt(0).toUpperCase() + element.name.slice(1)
+    var name = tweets.name.charAt(0).toUpperCase() + tweets.name.slice(1)
     document.getElementById('posts').innerHTML += tweetsBox(name, tweets.email,
         tweets.profilePic, tweets.tweetImg,
         new Date(tweets.createdOn).toLocaleTimeString(), tweets.tweets)
