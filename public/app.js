@@ -1,5 +1,5 @@
-var url = "http://localhost:5000"
-// var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
+// var url = "http://localhost:5000"
+var url = "https://realtime-twitter-jahanzaib.herokuapp.com"
 //user signup request using axios
 
 var socket = io(url);
@@ -108,12 +108,16 @@ function getProfile() {
         credentials: 'include',
     }).then((response) => {
         let src = response.data.profile.profilePic
-        document.getElementById('pName').innerHTML = response.data.profile.name
+        let name = response.data.profile.name;
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        document.getElementById('pName').innerHTML =name
         if (src) {
             document.getElementById('profilePic').style.backgroundImage = `url(${src})`;
+            document.getElementById('createPostImg').src = src;
         }
         else {
-            document.getElementById('profilePic').style.backgroundImage = `url('./fallback.png')`;
+            document.getElementById('createPostImg').style.backgroundImage = `url(${'./fallback.png'})`;
+            document.getElementById('profilePic').src = './fallback.png';
         }
         sessionStorage.setItem('email', response.data.profile.email)
     }, (error) => {
@@ -174,13 +178,14 @@ function getTweets() {
         let tweets = response.data.data;
         let html = ""
         tweets.forEach(element => {
+            var name = element.name.charAt(0).toUpperCase() + element.name.slice(1)
             if (element.profilePic) {
-                html += tweetsBox(element.name, element.email,
+                html += tweetsBox(name, element.email,
                     element.profilePic, element.tweetImg,
                     new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
             else {
-                html += tweetsBox(element.name, element.email,
+                html += tweetsBox(name, element.email,
                     './fallback.png', element.tweetImg,
                     new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
@@ -201,8 +206,9 @@ function myTweets() {
         let userTweet = response.data.data
         let userHtml = ""
         userTweet.forEach(element => {
+            var name = element.name.charAt(0).toUpperCase() + element.name.slice(1)
             if (element.profilePic) {
-                userHtml += tweetsBox(element.name, element.email,
+                userHtml += tweetsBox(name, element.email,
                     element.profilePic, element.tweetImg,
                     new Date(element.createdOn).toLocaleTimeString(), element.tweets)
             }
@@ -221,11 +227,12 @@ function myTweets() {
 socket.on('NEW_POST', (newPost) => {
     console.log(newPost)
     let tweets = newPost;
-    document.getElementById('posts').innerHTML += tweetsBox(tweets.name, tweets.email,
+    var name = element.name.charAt(0).toUpperCase() + element.name.slice(1)
+    document.getElementById('posts').innerHTML += tweetsBox(name, tweets.email,
         tweets.profilePic, tweets.tweetImg,
         new Date(tweets.createdOn).toLocaleTimeString(), tweets.tweets)
 
-    document.getElementById('userPosts').innerHTML += tweetsBox(tweets.name, tweets.email,
+    document.getElementById('userPosts').innerHTML += tweetsBox(name, tweets.email,
         tweets.profilePic, tweets.tweetImg,
         new Date(tweets.createdOn).toLocaleTimeString(), tweets.tweets)
 
@@ -317,7 +324,7 @@ function showUsers() {
 function upload() {
 
     var fileInput = document.getElementById("fileToUpload");
-
+    document.getElementById("Upload").innerHTML = "Uploading!";
     console.log("fileInput: ", fileInput);
     console.log("fileInput: ", fileInput.files[0]);
     // document.getElementById('profilePic').style.backgroundImage = `url(${fileInput.files[0]})`;
@@ -334,12 +341,10 @@ function upload() {
     })
         .then(res => {
             var userData = res
-            // userData = JSON.parse(userData)
             console.log("response data=> ", res.data);
-            // var jsonParse = JSON.parse(userData)
             console.log(`upload Success` + userData.toString());
-            // localStorage.setItem('aja', JSON.stringify(res))   
             document.getElementById("profilePic").style.backgroundImage = `url(${res.data.url})`
+            document.getElementById("Upload").innerHTML = res.data.message;
         })
         .catch(err => {
             console.log(err);
@@ -347,18 +352,29 @@ function upload() {
     return false;
 
 }
-function previewFile() {
-    const preview = document.getElementById('profilePic').style.backgroundImage;
-    console.log(preview)
+function preview() {
+    const preview = document.querySelector('img')
     const file = document.querySelector('input[type=file]').files[0];
     const reader = new FileReader();
 
     reader.addEventListener("load", function () {
         // convert image file to base64 string
-        preview.url = reader.result;
+        preview.src = reader.result;
     }, false);
 
     if (file) {
         reader.readAsDataURL(file);
+    }
+}
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#blah')
+                .attr('src', e.target.result)
+        };
+
+        reader.readAsDataURL(input.files[0]);
     }
 }

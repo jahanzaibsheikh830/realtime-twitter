@@ -44,7 +44,7 @@
                 <div>
                     <form>
                         <label for="fileToUpload">
-                            <div class="profile-pic" id="profilePic" >
+                            <div class="profile-pic" id="profilePic">
                                 <span class="glyphicon glyphicon-camera"></span>
                                 <span>Change Image</span>
                             </div>
@@ -52,6 +52,7 @@
                         <input type="File" name="fileToUpload" id="fileToUpload" onchange="upload(); previewFile()">
                     </form>
                     <div style="margin-top: -40px;">
+                        <span id="Upload"></span>
                         <h2 id="pName">Jahanzaib</h2>
                     </div>
                     <div>
@@ -64,22 +65,55 @@
             </div>
             <div class="main-content">
 
-                <section class="pt-3">
+                <section class="pt-3 mr-4 ml-4">
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <form onsubmit="return post()" action="#">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="tweet" aria-describedby="emailHelp"
-                                            placeholder="Type your post" required>
+                            <div class="col-md-6 pt-3" style="background-color: #1a2226; border-radius: 10px;">
+                                <div class="form-group">
+                                    <div class="row ">
+                                        <div class="col-md-2 pt-1">
+                                            <img src="" alt="" id="createPostImg" width="50" height="50" style="border-radius: 100%;">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input type="text" class="form-control"  data-toggle="modal"
+                                                placeholder="What's on your mind" style="border-radius: 20px; margin-left: -20px;"
+                                                data-target="#exampleModal" class="postInput">
+                                        </div>
                                     </div>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile"
-                                            accept="image/png, image/jpeg, img/jpg">
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Create Post</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form onsubmit="return post()" action="#">
+                                                    <div class="form-group">
+                                                        <textarea class="form-control" rows="3" id="tweet"
+                                                            style="outline: none; border: 0px;">Type your post</textarea>
+                                                    </div>
+                                                    <img src="" alt="" id="blah" style="width: 100%;">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="customFile"
+                                                            accept="image/png, image/jpeg, img/jpg"
+                                                            onchange="readURL(this);">
+                                                        <label class="custom-file-label" for="customFile">Choose
+                                                            file</label>
+                                                    </div>
+                                                    <button class="btn " style="width: 100%">Post</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button class="btn " style="width: 100%">Post</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,6 +136,11 @@
 
 
     <script src="app.js"></script>
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
 </body>
 
 </html>
