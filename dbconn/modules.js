@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-let dbURI = process.env.DBURI;
+let dbURI = "mongodb+srv://dbjahan:dbjahan@cluster0.8ric4.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on('connected', function() {
