@@ -45,7 +45,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: '*',
+    origin: 'https://realtime-twitter-jahanzaib.herokuapp.com/',
     credentials: true
 }));
 
